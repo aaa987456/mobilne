@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app/features/all_news/presentation/pages/home/all_news.dart';
 import 'package:news_app/features/all_news/presentation/pages/home/homepage.dart';
 import 'package:news_app/injection_container.dart';
 

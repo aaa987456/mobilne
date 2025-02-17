@@ -10,9 +10,9 @@ class ArticleRepositoryImplementation implements ArticleRepository {
   final NewsApiService newsApiService;
   ArticleRepositoryImplementation({required this.newsApiService});
   @override
-  Future<DataState<List<ArticleModel>>> getArticles() async {
+  Future<DataState<List<ArticleModel>>> getArticles(int page) async {
     try {
-      List<ArticleModel> articles = await newsApiService.getAllNews();
+      List<ArticleModel> articles = await newsApiService.getAllNews(page);
       return DataSuccess(articles);
     } on Exception catch (e) {
       return DataError(e);
@@ -21,10 +21,10 @@ class ArticleRepositoryImplementation implements ArticleRepository {
 
   @override
   Future<DataState<List<ArticleEntity>>> getArticlesByCategory(
-      Category category) async {
+      Category category, int page) async {
     try {
       List<ArticleModel> articles =
-          await newsApiService.getAllNewsByCategories(category);
+          await newsApiService.getAllNewsByCategories(category, page);
       return DataSuccess(articles);
     } on Exception catch (e) {
       return DataError(e);

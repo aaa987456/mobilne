@@ -14,19 +14,35 @@ class AllNews extends StatefulWidget {
 }
 
 class _AllNewsState extends State<AllNews> {
+  late final ScrollController _scrollController;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: buildBody(context));
+    return Scaffold(body: buildBody(context, _scrollController));
   }
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<RemoteArticleBloc>(context).add(const GetArticles());
+    _scrollController = ScrollController();
+    BlocProvider.of<RemoteArticleBloc>(context).add(const GetArticles(true));
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 0 && _scrollController.position.atEdge) {
+        print("Na rubu");
+        BlocProvider.of<RemoteArticleBloc>(context)
+            .add(const GetArticles(false));
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
 
-Widget buildBody(BuildContext context) {
+Widget buildBody(BuildContext context, ScrollController _scrollController) {
   return Scaffold(
     appBar: const PreferredSize(
         preferredSize: Size.fromHeight(48), child: AppBarAll()),
@@ -61,14 +77,22 @@ Widget buildBody(BuildContext context) {
     ),
     body: BlocBuilder<RemoteArticleBloc, RemoteArticleState>(
       builder: (context, state) {
-        if (state is RemoteArticleLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is RemoteArticleLoaded) {
+        if (state is RemoteArticleSuccess) {
+          bool isLoading = state is RemoteArticleLoading;
           return ListView.builder(
-            itemCount: state.articles.length,
+            controller: _scrollController,
+            itemCount:
+                isLoading ? state.articles.length + 1 : state.articles.length,
             itemBuilder: (context, index) {
+              if (isLoading && index == state.articles.length) {
+                return const ListTile(
+                  title: SizedBox(
+                    height: 5,
+                    width: 5,
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
               final article = state.articles[index];
               return ArticleTile(article: article);
             },

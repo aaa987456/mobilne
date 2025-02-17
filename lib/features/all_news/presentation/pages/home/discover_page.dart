@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:news_app/core/constants/categories.dart';
 import 'package:news_app/features/all_news/presentation/widgets/discover_tab_body.dart';
 
@@ -27,7 +26,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             bottom: TabBar(
                 isScrollable: true,
                 indicatorColor: Theme.of(context).colorScheme.primary,
-                tabs: [
+                tabs: const [
                   Tab(text: "Business"),
                   Tab(text: "Entertainment"),
                   Tab(text: "General"),
@@ -37,7 +36,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   Tab(text: "Technology"),
                 ]),
           ),
-          body: TabBarView(children: [
+          body: const TabBarView(children: [
             DiscoverTabBody(category: Category.business),
             DiscoverTabBody(category: Category.entertainment),
             DiscoverTabBody(category: Category.general),

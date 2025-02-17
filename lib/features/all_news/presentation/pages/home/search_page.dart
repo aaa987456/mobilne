@@ -22,6 +22,7 @@ class _SearchPageState extends State<SearchPage> {
                 fontWeight: FontWeight.bold,
               )),
         ),
+        extendBody: false,
         body: const SearchBarWidget(),
       ),
     );

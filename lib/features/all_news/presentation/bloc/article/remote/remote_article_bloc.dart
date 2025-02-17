@@ -32,7 +32,8 @@ class RemoteArticleBloc extends Bloc<RemoteArticleEvent, RemoteArticleState> {
   Future<void> onGetArticlesByCategory(
       GetArticlesByCategory event, Emitter<RemoteArticleState> emit) async {
     emit(ArticleCategoryLoadingState([]));
-    final dataState = await _getArticleByCategoryUseCase(event.category);
+    final dataState = await _getArticleByCategoryUseCase(Test(event.category,
+        params: event.category, isFirstPage: event.isFirstPage));
 
     if (dataState.isNotEmpty) {
       articles = List.of(dataState);
@@ -45,8 +46,8 @@ class RemoteArticleBloc extends Bloc<RemoteArticleEvent, RemoteArticleState> {
 
   Future<void> onGetArticles(
       GetArticles event, Emitter<RemoteArticleState> emit) async {
-    final dataState = await _getArticleUseCase(NoParams());
-
+    final dataState = await _getArticleUseCase(event.isFirstPage);
+    emit(RemoteArticleLoading(articles: articles));
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
       articles = List.of(dataState.data!);
       emit(RemoteArticleLoaded(dataState.data!));

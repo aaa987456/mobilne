@@ -14,6 +14,26 @@ class SearchBarWidget extends StatefulWidget {
 }
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 0 && _scrollController.position.atEdge) {
+        print("Na rubu");
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +43,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             padding: const EdgeInsets.all(10),
             child: TextField(
               onChanged: (value) {
-                if (value.length > 3) {
+                if (value.length >= 3) {
                   BlocProvider.of<RemoteArticleBloc>(context)
                       .add(GetArticleBySearchEvent(query: value));
                 }
@@ -45,11 +65,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 child: CircularProgressIndicator(),
               );
             } else if (state is ArticleSearchLoadedState) {
-              return ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.35,
-                    maxWidth: MediaQuery.of(context).size.width),
+              return Expanded(
                 child: ListView.builder(
+                  controller: _scrollController,
                   itemCount: state.articles.length,
                   itemBuilder: (context, index) {
                     final article = state.articles[index];

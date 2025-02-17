@@ -5,13 +5,14 @@ abstract class RemoteArticleEvent {
 }
 
 class GetArticles extends RemoteArticleEvent {
-  const GetArticles();
+  final bool isFirstPage;
+  const GetArticles(this.isFirstPage);
 }
 
 class GetArticlesByCategory extends RemoteArticleEvent {
   final Category category;
-
-  const GetArticlesByCategory(this.category);
+  final bool isFirstPage;
+  const GetArticlesByCategory(this.category, this.isFirstPage);
 }
 
 class SortByNewestDate extends RemoteArticleEvent {

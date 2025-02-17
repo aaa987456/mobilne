@@ -11,11 +11,15 @@ abstract class RemoteArticleState extends Equatable {
   List<Object?> get props => [articles, error];
 }
 
-class RemoteArticleLoading extends RemoteArticleState {
+class RemoteArticleSuccess extends RemoteArticleState {
+  const RemoteArticleSuccess({super.articles});
+}
+
+class RemoteArticleLoading extends RemoteArticleSuccess {
   const RemoteArticleLoading({super.articles});
 }
 
-class RemoteArticleLoaded extends RemoteArticleState {
+class RemoteArticleLoaded extends RemoteArticleSuccess {
   const RemoteArticleLoaded(List<ArticleEntity> articles)
       : super(articles: articles);
 }

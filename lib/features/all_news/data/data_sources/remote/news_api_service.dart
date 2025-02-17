@@ -9,9 +9,9 @@ import '../../../../../core/constants/constants.dart';
 class NewsApiService {
   final http.Client client = http.Client();
 
-  Future<List<ArticleModel>> getAllNews() async {
+  Future<List<ArticleModel>> getAllNews(int page) async {
     final response = await client.get(Uri.parse(
-        'https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey'));
+        'https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey&page=$page&pageSize=10'));
     if (response.statusCode == 200) {
       final List<dynamic> news = json.decode(response.body)['articles'];
       return news.map((e) => ArticleModel.fromJson(e)).toList();
@@ -20,9 +20,10 @@ class NewsApiService {
     }
   }
 
-  Future<List<ArticleModel>> getAllNewsByCategories(Category category) async {
+  Future<List<ArticleModel>> getAllNewsByCategories(
+      Category category, int page) async {
     final response = await client.get(Uri.parse(
-        'https://newsapi.org/v2/top-headlines?category=${category.name}&apiKey=$apiKey'));
+        'https://newsapi.org/v2/top-headlines?category=${category.name}&apiKey=$apiKey&page=$page&pageSize=10'));
     if (response.statusCode == 200) {
       final List<dynamic> news = json.decode(response.body)['articles'];
       return news.map((e) => ArticleModel.fromJson(e)).toList();
